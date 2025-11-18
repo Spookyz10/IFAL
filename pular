@@ -1,0 +1,4 @@
+def pular():
+    print("O animal pulou")
+
+nomeProgramador = "Alvaro"
