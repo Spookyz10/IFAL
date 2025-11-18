@@ -1,0 +1,4 @@
+def comer():
+    print("O animal comeu")
+
+desenvolverdor = "Bruno"
