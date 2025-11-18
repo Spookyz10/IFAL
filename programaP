@@ -1,0 +1,8 @@
+import pular
+import comer
+
+pular.pular()
+pular.nomeProgramador
+
+comer.comer()
+comer.desenvolvedor
