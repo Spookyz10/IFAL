@@ -1,0 +1,76 @@
+CREATE DATABASE LojaRoupas;
+USE LojaRoupas;
+
+CREATE TABLE produto (
+    id_produto INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    descricao VARCHAR(100),
+    categoria VARCHAR(50),
+    preco_custo DECIMAL(10, 2),
+    preco_venda DECIMAL(10, 2) NOT NULL,
+    estoque_minimo INTEGER DEFAULT 0
+);
+
+CREATE TABLE estoque (
+    id_estoque INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_produto INT NOT NULL,
+    tamanho VARCHAR(20) NOT NULL,
+    cor VARCHAR(50) NOT NULL,
+    quantidade INTEGER NOT NULL,
+    FOREIGN KEY (id_produto) REFERENCES produto(id_produto),
+    UNIQUE (id_produto, tamanho, cor)
+);
+
+CREATE TABLE movimentacao_estoque (
+    id_movimentacao INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_produto INT NOT NULL,
+    tipo_movimentacao VARCHAR(50) NOT NULL,
+    quantidade INTEGER NOT NULL,
+    data_hora DATETIME NOT NULL,
+    motivo VARCHAR(100),
+    FOREIGN KEY (id_produto) REFERENCES produto(id_produto)
+);
+
+CREATE TABLE cliente (
+    id_cliente INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL, 
+    cpf VARCHAR(11) UNIQUE NOT NULL,
+    telefone VARCHAR(15),
+    email VARCHAR(50),
+    endereco VARCHAR(150),
+    dt_cadastro DATE NOT NULL,
+    tamanho_padrao VARCHAR(5)
+);
+
+CREATE TABLE venda (
+    id_venda INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_cliente INT NULL,
+    data_hora DATETIME NOT NULL,
+    total_bruto DECIMAL(10, 2) NOT NULL,
+    desconto DECIMAL(10, 2) DEFAULT 0,
+    total_liquido DECIMAL(10, 2) NOT NULL,
+    status VARCHAR(50),
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
+);
+
+CREATE TABLE item_venda (
+    id_item INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_venda INT NOT NULL,
+    id_produto INT NOT NULL,
+    tamanho VARCHAR(20),
+    cor VARCHAR(20),
+    quantidade INT NOT NULL,
+    preco_unitario DECIMAL(10, 2) NOT NULL,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (id_venda) REFERENCES venda(id_venda),
+    FOREIGN KEY (id_produto) REFERENCES produto(id_produto)
+);
+
+CREATE TABLE pagamento (
+    id_pagamento INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_venda INT NOT NULL,
+    tipo_pagamento VARCHAR(20) NOT NULL,
+    valor_pago DECIMAL(10, 2) NOT NULL,
+    parcelas INT DEFAULT 1,
+    FOREIGN KEY (id_venda) REFERENCES venda(id_venda)
+);
